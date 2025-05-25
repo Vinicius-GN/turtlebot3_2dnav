@@ -9,12 +9,33 @@ project(turtlebot3_2dnav)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   move_base
-  # my_odom_configuration_dep
-  # my_sensor_configuration_dep
-  # my_tf_configuration_dep
+  roscpp
+  costmap_2d
+  nav_core
+  pluginlib
+  base_local_planner
   roscpp
   std_msgs
+  message_generation
 )
+
+add_message_files(
+  FILES
+    PlanningMetrics.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+    std_msgs
+)
+
+catkin_package(
+  LIBRARIES rrt_planning
+  CATKIN_DEPENDS std_msgs costmap_2d message_runtime nav_core pluginlib base_local_planner
+)
+
+
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -125,6 +146,13 @@ include_directories(
 
 add_executable(point_cloud scripts/publish_PointClouds.cpp)
 target_link_libraries(point_cloud ${catkin_LIBRARIES})
+add_library(rrt_planning src/rrt_planner.cpp src/vertex.cpp)
+target_link_libraries(rrt_planning ${catkin_LIBRARIES})
+
+add_library(${PROJECT_NAME} 
+  src/rrt_planner.cpp
+  src/vertex.cpp
+)
 
 
 ## Declare a C++ library

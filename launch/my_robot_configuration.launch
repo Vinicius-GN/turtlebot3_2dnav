@@ -19,22 +19,22 @@
    </node>
 
       <!-- Load the Gazebo simulator with a specific world -->
-   <!-- <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/> -->
+   <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
 
-   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+   <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_stage_4.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
     <arg name="debug" value="false"/>
-   </include>  
+   </include>   -->
 
    <!--Spawna the robots model-->
    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
 
     <!-- Run the map server -> MAPA PRONTO para navegação --> 
-   <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_2dnav)/main_map.yaml"/>
+   <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_2dnav)/maps/willow_garage_map.yaml"/>
 
    <!-- Load the RViz configuration -->
    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_gazebo)/rviz/turtlebot3_gazebo_model.rviz"/>

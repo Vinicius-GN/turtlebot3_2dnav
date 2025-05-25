@@ -28,7 +28,7 @@
 
   <!-- Outros nós, como map_server, rviz e move_base -->
   <node name="map_server" pkg="map_server" type="map_server"
-        args="$(find turtlebot3_2dnav)/main_map.yaml"/>
+        args="$(find turtlebot3_2dnav)/maps/main_map.yaml"/>
   
   <node name="rviz" pkg="rviz" type="rviz"
         args="-d $(find turtlebot3_gazebo)/rviz/turtlebot3_gazebo_model.rviz"/>

@@ -67,6 +67,21 @@
   <!-- <exec_depend>my_tf_configuration_dep</exec_depend> -->
   <exec_depend>roscpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <build_depend>nav_core</build_depend>
+  <exec_depend>nav_core</exec_depend>
+  <build_depend>base_local_planner</build_depend>
+  <exec_depend>base_local_planner</exec_depend>
+  <build_depend>base_global_planner</build_depend>
+  <exec_depend>base_global_planner</exec_depend>
+  <build_depend>costmap_2d</build_depend>
+  <exec_depend>costmap_2d</exec_depend>
+  <build_depend>pluginlib</build_depend>
+  <exec_depend>pluginlib</exec_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
     <!-- <depend package="tf"/>
   <depend package="nav_msgs"/> -->
 
@@ -74,7 +89,7 @@
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+   <nav_core plugin="${prefix}/rrt_planner_plugin.xml" />
   </export>
+  
 </package>
