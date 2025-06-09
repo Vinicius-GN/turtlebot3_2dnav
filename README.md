@@ -10,24 +10,27 @@ Projeto para exploração de ambientes mapeados, planejamento de trajetórias (D
 </p>
 
 <div align="center">
-[![ROS Noetic](https://img.shields.io/badge/ROS-Noetic-blue.svg)]  
-[![Ubuntu 20.04](https://img.shields.io/badge/Ubuntu-20.04-orange.svg)]  
-[![Build Status](https://img.shields.io/badge/build-catkin--make-brightgreen)]  
-[![License](https://img.shields.io/github/license/usuario/repositorio.svg)](LICENSE)
+  
+![ROS Noetic](https://img.shields.io/badge/ROS-Noetic-blue.svg)
+![Ubuntu 20.04](https://img.shields.io/badge/Ubuntu-20.04-orange.svg)
+![Build Status](https://img.shields.io/badge/build-catkin--make-brightgreen)
+
 </div>
 
 ---
 
 <div align="center">
-• [Estrutura do Repositório](#estrutura-do-repositório-📂)  
-• [Visão Geral](#visão-geral-🗺️)  
-• [Pacotes ROS Utilizados](#pacotes-ros-utilizados)  
-• [Arquitetura & Algoritmos](#arquitetura--algoritmos-⚙️)  
-• [Requisitos Atendidos](#requisitos-atendidos-✅)  
-• [Como Compilar e Rodar](#como-compilar-e-rodar-🚀)  
-• [Contribuição](#contribuição-🤝)  
-• [Licença](#licença-📄)  
-• [Membros](#membros-👥)  
+  
+• [Estrutura do Repositório](#estrutura-do-repositório-📂)
+• [Visão Geral](#visão-geral-🗺️)
+• [Pacotes ROS Utilizados](#pacotes-ros-utilizados)
+• [Arquitetura & Algoritmos](#arquitetura--algoritmos-⚙️)
+• [Requisitos Atendidos](#requisitos-atendidos-✅)
+• [Como Compilar e Rodar](#como-compilar-e-rodar-🚀)
+• [Contribuição](#contribuição-🤝)
+• [Licença](#licença-📄)
+• [Membros](#membros-👥)
+  
 </div>
 
 ---
@@ -40,7 +43,7 @@ turtlebot3_2dnav/
 │   ├── costmap_common_params.yaml    # Parâmetros comuns do costmap
 │   ├── global_costmap_params.yaml    # Config. do costmap global
 │   ├── local_costmap_params.yaml     # Config. do costmap local
-│   └── rrt_global_planner_params.yaml# Parâmetros do planner RRT*
+│   └── rrt_global_planner_params.yaml # Parâmetros do planner RRT*
 ├── include/                          
 │   ├── rrt_planner.h                 
 │   └── vertex.h                      
@@ -56,15 +59,12 @@ turtlebot3_2dnav/
 ├── msg/                              
 │   └── PlanningMetrics.msg           # Mensagem customizada
 ├── scripts/                          
-│   ├── odometry.cpp                  # Publica odometria
-│   ├── publish_PointClouds.cpp       # Publica nuvem de pontos
 │   └── publishing_GoalPoses.py       # Publica waypoints no move_base
 ├── src/                              
 │   ├── rrt_planner.cpp               # Plugin RRT* customizado
 │   └── vertex.cpp                    # Estrutura de vértices para RRT*
 ├── urdf/                             
-│   ├── summit_base.urdf              # Robô base
-│   └── mecanum.xacro                 # Robô com 4 rodas mecanum e LiDAR
+│   ├── summit_base.urdf              # Robô com 4 rodas mecanum e LiDAR
 ├── CMakeLists.txt                    
 └── package.xml                        
 ```
@@ -76,7 +76,7 @@ turtlebot3_2dnav/
 | **`scripts/publishing_GoalPoses.py`**  | Nó Python          | Publica uma sequência de GoalPoints no `move_base`   | `rospy`, `actionlib`, `move_base_msgs` |
 | **`src/rrt_planner.cpp`**              | Plugin C++         | Planejador Global RRT* customizado                   | `nav_core`, `pluginlib`            |
 | **`launch/move_base.launch`**          | Launch file        | Inicializa `move_base` com AMCL e planners configurados | `roslaunch`, `amcl`, `nav_core`    |
-| **`urdf/mecanum.xacro`**               | Modelo URDF/Xacro  | Robô holonômico com 4 rodas mecanum e sensor LiDAR   | `robot_state_publisher`, `gazebo_ros` |
+| **`urdf/summit_base.urdf`**               | Modelo URDF/Xacro  | Robô holonômico com 4 rodas mecanum e sensor LiDAR   | `robot_state_publisher`, `gazebo_ros` `plannar_move` |
 | **`config/rrt_global_planner_params.yaml`** | Configuração       | Parâmetros do planner RRT* (iterações, step size)    | `rosparam`                         |
 
 ## Pacotes ROS Utilizados
@@ -123,7 +123,7 @@ turtlebot3_2dnav/
 ```bash
 # 1. Clone o repositório
 cd ~/catkin_ws/src
-git clone https://github.com/usuario/turtlebot3_2dnav.git
+git clone https://github.com/Vinicius-GN/turtlebot3_2dnav/
 
 # 2. Instalar dependências automaticamente
 cd ~/catkin_ws
@@ -136,14 +136,20 @@ source devel/setup.bash
 
 # 4. Executar a simulação e navegação
 
-# Terminal A: SLAM e RViz
-roslaunch turtlebot3_2dnav mapping.launch
+# Terminal A: move_base com AMCL e planners com mapa estático gerado por SLAM
+roslaunch turtlebot3_2dnav mecanum.launch
 
-# Terminal B: move_base com AMCL e planners
-roslaunch turtlebot3_2dnav move_base.launch
-
-# Terminal C: Publica waypoints para navegação
+# Terminal B: Publica waypoints para navegação
 rosrun turtlebot3_2dnav publishing_GoalPoses.py
+```
+
+**Comportamento Esperado:**
+Navegação pelo mapa baseando-se em pontos pré-definidos deve se iniciar e finalizar de forma autônoma com o algoritmo escolhido na linha do arquivo "mecanum.launch":
+```bash
+##A linha descomentada seleciona o algoritmo de planejamento global utilizado na navegação.
+<!-- <arg name="base_global_planner" default="navfn/NavfnROS"/> -->
+<arg name="base_global_planner" default="rrt_planning/RRTPlanner"/>
+<!-- <arg name="base_global_planner" default="srl_dstar_lite/SrlDstarLite"/> --> //Esse está em processo de otimização.
 ```
 
 ## Contribuição 🤝
@@ -158,8 +164,7 @@ Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Membros 👥
 
-| Nome                  | GitHub                                      |
-|-----------------------|---------------------------------------------|
-| Seu Nome              | [@seu_usuario](https://github.com/seu_usuario) |
-| Outro Membro          | [@outro_usuario](https://github.com/outro_usuario) |
+| Nome                  | GitHub                                      | Número USP                                     |
+|-----------------------|---------------------------------------------|---------------------------------------------|
+| Vinicius             | [@Vinicius-GN](https://github.com/Vinicius-GN) | 14749363                              |
 
