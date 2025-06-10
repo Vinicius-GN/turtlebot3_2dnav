@@ -6,7 +6,7 @@
 Projeto para exploração de ambientes mapeados, planejamento de trajetórias (Dijkstra e RRT*) e navegação autônoma usando **ROS Noetic** em **Ubuntu 20.04 LTS**.
 
 <p align="center">
-  <img src="Images/navigation_demo.png" alt="Demonstração da navegação autônoma">
+  [Link para o vídeo de apresentação](
 </p>
 
 <div align="center">
