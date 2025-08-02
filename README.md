@@ -106,6 +106,16 @@ turtlebot3_2dnav/
 3. Re-wiring para otimização de custo.  
 4. Publicação da árvore e do caminho em `/plan`.
 
+#### D\* Lite (Plugin customizado)
+1. Inicialização dos valores de custo e heurística no grid.
+2. Cálculo do caminho ótimo do ponto atual até o destino (similar ao A\*).
+3. Monitoramento do ambiente para detectar mudanças (ex.: novos obstáculos).
+4. Atualização incremental do caminho a partir das mudanças percebidas.
+5. Repriorização dos nós afetados na fila de prioridade.
+6. Geração de nova rota otimizada com mínimo custo até o destino.
+7. Publicação contínua do caminho atualizado em `/plan`.
+
+
 ### 3. Movimentação Holonômica
 - 4 rodas mecanum simuladas pelo plugin **PlanarMove**.  
 - Comandos de velocidade publicados em `/cmd_vel`.
